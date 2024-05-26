@@ -12,7 +12,7 @@ const CountryStateCitySelector = () => {
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
 
-  const [message, setMessage] = useState('');
+  const [shouldDisplayMessage, setShouldDisplayMessage] = useState(false);
 
   useEffect(() => {
     fetchCountries();
@@ -34,7 +34,7 @@ const CountryStateCitySelector = () => {
       setCountries(countriesResponse);
     } catch (error) {
       console.error('Error fetching countries:', error);
-      setCountries([]); // Set an empty array on error
+      setCountries([]);
     }
   };
 
@@ -45,7 +45,7 @@ const CountryStateCitySelector = () => {
         setStates(statesResponse);
       } catch (error) {
         console.error('Error fetching states:', error);
-        setStates([]); // Set an empty array on error
+        setStates([]);
       }
     } else {
       setStates([]);
@@ -61,7 +61,7 @@ const CountryStateCitySelector = () => {
         setCities(citiesResponse);
       } catch (error) {
         console.error('Error fetching cities:', error);
-        setCities([]); // Set an empty array on error
+        setCities([]);
       }
     } else {
       setCities([]);
@@ -71,58 +71,54 @@ const CountryStateCitySelector = () => {
 
   const handleCountryChange = (event) => {
     setSelectedCountry(event.target.value);
+    setShouldDisplayMessage(false);
   };
 
   const handleStateChange = (event) => {
     setSelectedState(event.target.value);
+    setShouldDisplayMessage(false);
   };
 
   const handleCityChange = (event) => {
-    setSelectedCity(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (selectedCountry && selectedState && selectedCity) {
-      setMessage(`You Selected ${selectedCity}, ${selectedState}, ${selectedCountry}`);
+    const selectedCityValue = event.target.value;
+    setSelectedCity(selectedCityValue);
+    if (selectedCountry && selectedState && selectedCityValue) {
+      setShouldDisplayMessage(true);
     } else {
-      setMessage('Please select all fields');
+      setShouldDisplayMessage(false);
     }
   };
 
   return (
     <div>
       <h1>Select Location</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="container">
-          <Select
-            id="country"
-            value={selectedCountry}
-            onChange={handleCountryChange}
-            disabled={false}
-            placeholder="Select Country"
-            options={countries || []}
-          />
-          <Select
-            id="state"
-            value={selectedState}
-            onChange={handleStateChange}
-            disabled={!selectedCountry}
-            placeholder="Select State"
-            options={states || []}
-          />
-          <Select
-            id="city"
-            value={selectedCity}
-            onChange={handleCityChange}
-            disabled={!selectedState}
-            placeholder="Select City"
-            options={cities || []}
-          />
-          <button type="submit" disabled={!selectedCity}>Submit</button>
-        </div>
-      </form>
-      {message && (
+      <div className="container">
+        <Select
+          id="country"
+          value={selectedCountry}
+          onChange={handleCountryChange}
+          disabled={false}
+          placeholder="Select Country"
+          options={countries || []}
+        />
+        <Select
+          id="state"
+          value={selectedState}
+          onChange={handleStateChange}
+          disabled={!selectedCountry}
+          placeholder="Select State"
+          options={states || []}
+        />
+        <Select
+          id="city"
+          value={selectedCity}
+          onChange={handleCityChange}
+          disabled={!selectedState}
+          placeholder="Select City"
+          options={cities || []}
+        />
+      </div>
+      {shouldDisplayMessage && (
         <div>
           <span style={{ color: 'black' }}>You selected</span> <span style={{ color: 'black', fontSize: '30px' }}>{selectedCity}</span>, {selectedState}, <span>{selectedCountry}</span>
         </div>
