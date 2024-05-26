@@ -1,0 +1,19 @@
+/* styles.css */
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+select {
+  padding: 10px;
+}
+
+select::placeholder {
+  color: gray;
+}
+
+h2 {
+  color: gray;
+}
