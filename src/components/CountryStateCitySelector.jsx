@@ -29,17 +29,24 @@ const CountryStateCitySelector = () => {
   }, [selectedState]);
 
   const fetchCountries = async () => {
-    const countriesResponse = await getAllCountries();
-    setCountries(countriesResponse);
-
+    try {
+      const countriesResponse = await getAllCountries();
+      setCountries(countriesResponse);
+    } catch (error) {
+      console.error('Error fetching countries:', error);
+      setCountries([]); // Set an empty array on error
+    }
   };
 
   const fetchStates = async () => {
     if (selectedCountry) {
-
-      const statesResponse = await getStatesOfSelectedCountry(selectedCountry);
-      setStates(statesResponse);
-
+      try {
+        const statesResponse = await getStatesOfSelectedCountry(selectedCountry);
+        setStates(statesResponse);
+      } catch (error) {
+        console.error('Error fetching states:', error);
+        setStates([]); // Set an empty array on error
+      }
     } else {
       setStates([]);
     }
@@ -49,10 +56,13 @@ const CountryStateCitySelector = () => {
 
   const fetchCities = async () => {
     if (selectedState) {
-
-      const citiesResponse = await getCitiesOfSelectedState(selectedCountry, selectedState);
-      setCities(citiesResponse);
-
+      try {
+        const citiesResponse = await getCitiesOfSelectedState(selectedCountry, selectedState);
+        setCities(citiesResponse);
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+        setCities([]); // Set an empty array on error
+      }
     } else {
       setCities([]);
     }
@@ -91,7 +101,7 @@ const CountryStateCitySelector = () => {
             onChange={handleCountryChange}
             disabled={false}
             placeholder="Select Country"
-            options={countries}
+            options={countries || []}
           />
           <Select
             id="state"
@@ -99,7 +109,7 @@ const CountryStateCitySelector = () => {
             onChange={handleStateChange}
             disabled={!selectedCountry}
             placeholder="Select State"
-            options={states}
+            options={states || []}
           />
           <Select
             id="city"
@@ -107,15 +117,15 @@ const CountryStateCitySelector = () => {
             onChange={handleCityChange}
             disabled={!selectedState}
             placeholder="Select City"
-            options={cities}
+            options={cities || []}
           />
           <button type="submit" disabled={!selectedCity}>Submit</button>
         </div>
       </form>
       {message && (
-        <h2>
+        <div>
           <span style={{ color: 'black' }}>You selected</span> <span style={{ color: 'black', fontSize: '30px' }}>{selectedCity}</span>, {selectedState}, <span>{selectedCountry}</span>
-        </h2>
+        </div>
       )}
     </div>
   );
