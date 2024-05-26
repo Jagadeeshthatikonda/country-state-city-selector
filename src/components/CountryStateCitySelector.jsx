@@ -114,7 +114,7 @@ const CountryStateCitySelector = () => {
       </form>
       {message && (
         <h2>
-          <span style={{ color: 'black' }}>You Selected</span> <span style={{ color: 'black', fontSize: '30px' }}>{selectedCity}</span>, {selectedState}, <span>{selectedCountry}</span>
+          <span style={{ color: 'black' }}>You selected</span> <span style={{ color: 'black', fontSize: '30px' }}>{selectedCity}</span>, {selectedState}, <span>{selectedCountry}</span>
         </h2>
       )}
     </div>
